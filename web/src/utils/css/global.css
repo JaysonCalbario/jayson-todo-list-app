@@ -1,0 +1,55 @@
+/* global.css */
+.cursor-grab {
+  cursor: grab;
+}
+
+.cursor-grabbing:active {
+  cursor: grabbing;
+}
+
+/* 🌥️ Custom Subtle Gradient Background */
+body {
+  background-image: linear-gradient(to bottom right, #ffffff, #f3f4f6ba, #fbeaea6d);
+  background-attachment: fixed;
+  background-size: cover;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  font-family: system-ui, sans-serif;
+  color: #1f2937; /* Tailwind gray-800 for default text */
+}
+
+/* 🔴 Focus ring for inputs */
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #b83f45;
+  box-shadow: 0 0 0 3px rgba(184, 63, 79, 0.3);
+}
+
+input::placeholder,
+textarea::placeholder {
+  font-style: italic;
+  font-family: inherit;
+  color: #9ca3af; /* Subtle gray */
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ✅ Larger checkboxes + no focus ring */
+input[type="checkbox"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: #b83f45;
+  box-shadow: none;
+  outline: none;
+}
+
+input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: transparent;
+}
