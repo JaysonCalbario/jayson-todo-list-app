@@ -149,17 +149,19 @@ You can customize .env values accordingly.
 
 ✅ Features
 
-Add, edit, delete todos
+### ✅ TODO App
+- Add, edit, delete todos
+- Reorder via drag-and-drop
+- Filter: All / Active / Completed
+- Real-time sync across tabs/devices
 
-Reorder via drag-and-drop
+### 💬 Chat App
+- Real-time WebSocket messaging
+- Threaded replies (like Messenger)
+- Emoji picker with insert-at-cursor
+- Stylish glassmorphic + gradient UI
+- User avatars and sender IDs
 
-Real-time syncing across tabs/devices
-
-Filtering: All, Active, Completed
-
-Blurred glass UI with gradient background
-
-Dockerized setup for local development
 
 📁 Folder Structure
 
