@@ -177,7 +177,6 @@ Frontend will run at: [http://localhost:3000](http://localhost:3000)
 
 ### 💬 Chat App
 - Real-time WebSocket messaging
-- Threaded replies (like Messenger)
 - Emoji picker with insert-at-cursor
 - Stylish glassmorphic + gradient UI
 - User avatars and sender IDs
