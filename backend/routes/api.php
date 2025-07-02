@@ -19,6 +19,14 @@ Route::get('/broadcast', function () {
     return 'Event dispatched!';
 });
 
+Route::post('/chat/send', function (Request $request) {
+    broadcast(new \App\Events\ChatMessage(
+        $request->senderId,
+        $request->message
+    ))->toOthers();
+    return response()->noContent();
+});
+
 Route::get('/todos', [TodoController::class, 'index']);
 Route::post('/todos', [TodoController::class, 'store']);
 Route::put('/todos/reorder', [TodoController::class, 'reorder']);

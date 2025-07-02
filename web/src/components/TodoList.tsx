@@ -69,7 +69,7 @@ function TodoList() {
           </SortableContext>
         </DndContext>
 
-        <div className="flex flex-col sm:flex-row justify-between items-center p-4 border-t border-gray-200 bg-gray-50">
+        <div className="flex  mb-5 flex-col sm:flex-row justify-between items-center p-4 border-t border-gray-200 bg-gray-50">
           <span className="text-gray-900 text-md">
             {itemsLeft === 0 ? 'No items left' : `${itemsLeft} item${itemsLeft > 1 ? 's' : ''} left`}
           </span>
