@@ -1,153 +1,159 @@
 
-📜 Full-Stack TODO App (Laravel + Next.js + Soketi + MySQL + Docker)
+# 📜 Full-Stack TODO + Chat App (Laravel + Next.js + Soketi + MySQL + Docker)
 
-A modern TODO list application with:
+A modern TODO list application bundled with a fully-featured real-time chat app:
 
-✅ Laravel REST API
-
-✅ Real-time updates via Soketi + Laravel Echo
-
-✅ Drag-and-drop (DnD) with @dnd-kit
-
-✅ Beautiful frontend in Next.js + Tailwind CSS
-
-✅ MySQL database (local)
-
+✅ Laravel REST API  
+✅ Real-time updates via Soketi + Laravel Echo  
+✅ Threaded chat replies (Messenger-style)  
+✅ Emoji support  
+✅ Drag-and-drop (DnD) with `@dnd-kit`  
+✅ Beautiful frontend in Next.js + Tailwind CSS  
+✅ MySQL database (local)  
 ✅ Docker support for local development
 
-⚙️ Tech Stack
+---
 
-Layer
+## ⚙️ Tech Stack
 
-Tech
+| Layer       | Tech                          |
+|-------------|-------------------------------|
+| Frontend    | Next.js + Tailwind CSS        |
+| Backend API | Laravel 10                    |
+| WebSockets  | Soketi + Laravel Echo         |
+| Chat        | WebSocket 
+| Database    | MySQL (local)                 |
+| DevOps      | Docker + Docker Compose       |
 
-Frontend
+---
 
-Next.js + Tailwind CSS
+## 🗶️ Requirements
 
-Backend API
+- Node.js ≥ 18.x  
+- PHP ≥ 8.1  
+- Composer  
+- MySQL  
+- Laravel Echo client  
+- Soketi (`npm i -g @soketi/soketi`)  
+- Docker + Docker Compose (optional)  
+- Git
 
-Laravel 10
+---
 
-WebSockets
+## 🗓️ Setup Instructions (Fresh Machine)
 
-Soketi + Laravel Echo
+### 1. Clone the Repo
 
-Database
+```bash
+git clone https://github.com/JaysonCalbario/jayson-todo-list-app.git
+cd jayson-todo-list-app
+```
 
-MySQL (local)
+### 2. Start MySQL (if local)
 
-DevOps
+If you're not using Docker, make sure MySQL is running on `127.0.0.1:3306` and a database named `todo_db` exists. Create it if needed:
 
-Docker + Docker Compose
+```sql
+CREATE DATABASE todo_db;
+```
 
-📆 Requirements
+> Use the following MySQL user credentials if you're aligning with the backend `.env`:
+> 
+> ```sql
+> CREATE USER 'todo_user'@'%' IDENTIFIED BY 'secret';
+> GRANT ALL PRIVILEGES ON todo_db.* TO 'todo_user'@'%';
+> FLUSH PRIVILEGES;
+> ```
 
-Node.js ≥ 18.x
+### 3. Backend (Laravel API)
 
-PHP ≥ 8.1
-
-Composer
-
-MySQL
-
-Laravel Echo client
-
-Soketi (npm i -g @soketi/soketi)
-
-Docker + Docker Compose (for optional containerization)
-
-Git
-
-🗓️ Setup Instructions
-
-1. Clone the Repo
-
-[git clone gh repo clone JaysonCalbario/jayson-todo-list-app]
-https://github.com/JaysonCalbario/jayson-todo-list-app.git
-cd todo-app
-
-2. Backend (Laravel API)
-
+```bash
 cd backend
 cp .env.example .env
 composer install
 php artisan key:generate
+```
 
-Update .env:
+Update `.env`:
+
+```env
+APP_URL=http://todo-app.local:8000
 
 DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
+DB_HOST=192.168.68.130
 DB_PORT=3306
 DB_DATABASE=todo_db
-DB_USERNAME=root
+DB_USERNAME=todo_user
 DB_PASSWORD=secret
 
 BROADCAST_DRIVER=pusher
-
-PUSHER_APP_ID=local
-PUSHER_APP_KEY=local
-PUSHER_APP_SECRET=local
-PUSHER_HOST=127.0.0.1
+PUSHER_APP_ID=app-id
+PUSHER_APP_KEY=app-key
+PUSHER_APP_SECRET=app-secret
+PUSHER_HOST=192.168.68.130
 PUSHER_PORT=6001
 PUSHER_SCHEME=http
-PUSHER_APP_CLUSTER=local
+PUSHER_APP_CLUSTER=mt1
+```
 
 Then:
 
+```bash
 php artisan migrate
 php artisan serve
+```
 
-API now running at: http://127.0.0.1:8000
+API should now be available at: [http://192.168.68.130:8000](http://192.168.68.130:8000)
 
-3. WebSockets (Soketi)
+### 4. WebSockets (Soketi)
 
-Install if not yet:
-
+```bash
 npm install -g @soketi/soketi
-
-Run it:
-
 soketi start
+```
 
-Make sure it's listening on port 6001
+Soketi should be running on `http://192.168.68.130:6001`
 
-4. Frontend (Next.js)
+### 5. Frontend (Next.js)
 
+```bash
 cd ../frontend
 npm install
+```
 
-Create .env.local:
+Create `.env.local`:
 
-NEXT_PUBLIC_API_URL=http://127.0.0.1:8000/api
-NEXT_PUBLIC_PUSHER_KEY=local
-NEXT_PUBLIC_PUSHER_CLUSTER=local
-NEXT_PUBLIC_SOCKET_HOST=127.0.0.1
+```env
+NEXT_PUBLIC_API_URL=http://192.168.68.130:8000/api
+NEXT_PUBLIC_PUSHER_KEY=app-key
+NEXT_PUBLIC_PUSHER_CLUSTER=mt1
+NEXT_PUBLIC_SOCKET_HOST=192.168.68.130
 NEXT_PUBLIC_SOCKET_PORT=6001
+```
 
 Then start the dev server:
 
+```bash
 npm run dev
+```
 
-App now at: http://localhost:3000
+Open: [http://localhost:3000](http://localhost:3000)
 
-🐳 Optional: Run with Docker
+---
 
-To spin up MySQL and optionally run Laravel services:
+## 👉 Optional: Docker Setup
 
+To spin up MySQL and Laravel using Docker:
+
+```bash
 docker-compose up -d
+```
 
-Example docker-compose.yml might include services for:
+Ensure your `.env` files align with Docker container IPs and ports.
 
-MySQL database
+---
 
-Soketi (WebSocket server)
-
-Laravel (as artisan serve or Nginx)
-
-You can customize .env values accordingly.
-
-✅ Features
+## 🗉️ Features
 
 ### ✅ TODO App
 - Add, edit, delete todos
@@ -162,53 +168,21 @@ You can customize .env values accordingly.
 - Stylish glassmorphic + gradient UI
 - User avatars and sender IDs
 
+---
 
-📁 Folder Structure
+## 📁 Folder Structure
 
+```
 jayson-todo-list-app/
 ├── backend/      # Laravel API
-├── frontend/     # Next.js client
-└── docker/       # Optional Docker files and config
-
-🧑‍💻 Author
-
-Built by Jayson Calbario
-=======
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started to run this web file or the frontend
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+├── frontend/     # Next.js client (TODO + Chat)
+└── docker/       # Optional Docker config
 ```
 
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🧑‍💻 Author
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Built with ❤️ by **Jayson Calbario**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
+> Contributions welcome!
