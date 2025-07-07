@@ -1,11 +1,22 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { ChatMessage } from '@/app/lib/types'; 
 
-export interface ChatMessage {
-  senderId: string;
-  message: string;
-}
+
+// ✅ UUID fallback if crypto.randomUUID is not supported
+const generateUUID = () => {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+
+  // Fallback UUID v4
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+};
 
 export function useChatSocket() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -13,13 +24,23 @@ export function useChatSocket() {
   const socketRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
-    const id = sessionStorage.getItem('clientId') || crypto.randomUUID();
+    if (typeof window === 'undefined') return; 
+
+    const id = sessionStorage.getItem('clientId') || generateUUID();
     sessionStorage.setItem('clientId', id);
     setClientId(id);
 
-    const socket = new WebSocket(
-      'ws://192.168.68.130:6001/app/app-key?protocol=7&client=js&version=4.3.1'
-    );
+    const host = process.env.NEXT_PUBLIC_SOCKET_HOST;
+    const port = process.env.NEXT_PUBLIC_SOCKET_PORT;
+    const key = process.env.NEXT_PUBLIC_PUSHER_KEY;
+
+    if (!host || !port || !key) {
+      console.error('❌ Missing WebSocket environment variables.');
+      return;
+    }
+
+    const socketUrl = `ws://${host}:${port}/app/${key}?protocol=7&client=js&version=4.3.1`;
+    const socket = new WebSocket(socketUrl);
     socketRef.current = socket;
 
     socket.onopen = () => {

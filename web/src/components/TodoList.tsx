@@ -7,11 +7,6 @@ import { useSensor, useSensors, PointerSensor, DndContext, closestCenter } from 
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useTodoHandlers } from '../hooks/useTodoHandlers';
 
-export interface Todo {
-  id: number;
-  title: string;
-  completed: boolean;
-}
 
 function TodoList() {
   const {
@@ -34,6 +29,10 @@ function TodoList() {
 
   const sensors = useSensors(useSensor(PointerSensor));
 
+  const uniqueFilteredTodos = [
+    ...new Map(filteredTodos.map(todo => [todo.id, todo])).values(),
+  ];
+
   return (
     <div className="p-4 max-w-4xl w-full mx-auto">
       <h1 className="text-3xl sm:text-4xl font-extrabold mb-6 text-center text-gray-800 tracking-tight">
@@ -50,19 +49,19 @@ function TodoList() {
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
         >
-          <SortableContext items={filteredTodos.map(todo => todo.id)} strategy={verticalListSortingStrategy}>
+          <SortableContext  items={uniqueFilteredTodos.map(todo => todo.id)} strategy={verticalListSortingStrategy}>
             <ul>
-              {filteredTodos.map(todo => (
+              {uniqueFilteredTodos.map(todo => (
                 <TodoItem
-                  key={todo.id}
-                  todo={todo}
-                  toggleComplete={toggleComplete}
-                  handleDelete={handleDelete}
-                  handleEdit={handleEdit}
-                  editingId={editingId}
-                  editedTitle={editedTitle}
-                  setEditedTitle={setEditedTitle}
-                  handleEditSave={handleEditSave}
+                key={todo.id}
+                todo={todo}
+                toggleComplete={toggleComplete}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+                editingId={editingId}
+                editedTitle={editedTitle}
+                setEditedTitle={setEditedTitle}
+                handleEditSave={handleEditSave}
                 />
               ))}
             </ul>

@@ -1,12 +1,7 @@
 import '../utils/css/global.css';
-
-interface Props {
-    newTodo: string;
-    setNewTodo: (val: string) => void;
-    handleAdd: () => void;
-  }
+import { TodoInputProps as Prop } from '@/app/lib/types';
   
- function TodoInput({ newTodo, setNewTodo, handleAdd }: Props) {
+ function TodoInput({ newTodo, setNewTodo, handleAdd }: Prop) {
   return (
     <div className="mb-4 flex flex-col sm:flex-row gap-2 w-full">
     <input

@@ -1,19 +1,8 @@
 import React from "react";
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Todo } from "./TodoList";
 import '../utils/css/global.css';
-
-interface Props {
-  todo: Todo;
-  toggleComplete: (todo: Todo) => void;
-  handleDelete: (id: number) => void;
-  handleEdit: (todo: Todo) => void;
-  editingId: number | null;
-  editedTitle: string;
-  setEditedTitle: (val: string) => void;
-  handleEditSave: (todo: Todo) => void;
-}
+import { TodoItemProps as Props } from '@/app/lib/types';
 
 function TodoItem({
   todo,

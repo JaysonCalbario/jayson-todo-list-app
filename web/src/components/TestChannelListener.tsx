@@ -2,10 +2,8 @@
 
 import { useEffect } from 'react';
 import '../utils/echo';
+import { TestEventPayload } from '../app/lib/types'; 
 
-interface TestEventPayload {
-  message: string;
-}
 
 export default function TestChannelListener() {
   useEffect(() => {

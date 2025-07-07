@@ -1,24 +1,34 @@
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
+import type { Broadcaster } from 'laravel-echo';
 
 declare global {
   interface Window {
     Pusher: typeof Pusher;
-    Echo: Echo;
+    Echo: Echo<keyof Broadcaster>;
   }
 }
 
 if (typeof window !== 'undefined') {
-  window.Pusher = Pusher;
+  const key = process.env.NEXT_PUBLIC_PUSHER_KEY;
+  const cluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
+  const wsHost = process.env.NEXT_PUBLIC_SOCKET_HOST;
+  const wsPort = process.env.NEXT_PUBLIC_SOCKET_PORT;
 
-  window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: 'app-key',
-    cluster: 'mt1',
-    wsHost: '192.168.68.130',
-    wsPort: 6001,
-    forceTLS: false,
-    disableStats: true,
-    enabledTransports: ['ws'],
-  });
+  if (!key || !cluster || !wsHost || !wsPort) {
+    console.error('❌ Missing Echo/Pusher environment variables');
+  } else {
+    window.Pusher = Pusher;
+
+    window.Echo = new Echo<keyof Broadcaster>({
+      broadcaster: 'pusher',
+      key,
+      cluster,
+      wsHost,
+      wsPort: Number(wsPort),
+      forceTLS: false,
+      disableStats: true,
+      enabledTransports: ['ws'],
+    });
+  }
 }
