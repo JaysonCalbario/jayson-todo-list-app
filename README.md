@@ -1,4 +1,3 @@
-
 # 📜 Full-Stack TODO + Chat App (Laravel + Next.js + Soketi + MySQL + Docker)
 
 A modern TODO list application bundled with a fully-featured real-time chat app:
@@ -153,11 +152,15 @@ npm install
 ```
 Create `.env.local`:
 ```env
+# Base URL of the Laravel API
 NEXT_PUBLIC_API_URL=http://127.0.0.1:8000/api
-NEXT_PUBLIC_PUSHER_KEY=app-key
-NEXT_PUBLIC_PUSHER_CLUSTER=mt1
-NEXT_PUBLIC_SOCKET_HOST=127.0.0.1
-NEXT_PUBLIC_SOCKET_PORT=6001
+
+# WebSocket (Soketi) settings for Laravel Echo
+NEXT_PUBLIC_PUSHER_KEY=app-key                  # Must match PUSHER_APP_KEY in Laravel backend
+NEXT_PUBLIC_PUSHER_CLUSTER=mt1                  # Keep as-is for compatibility
+NEXT_PUBLIC_SOCKET_HOST=127.0.0.1               # IP address or hostname of Soketi server
+NEXT_PUBLIC_SOCKET_PORT=6001                    # WebSocket port defined in backend (Laravel/Soketi)
+
 ```
 Then:
 ```bash
@@ -177,6 +180,7 @@ Frontend will run at: [http://localhost:3000](http://localhost:3000)
 
 ### 💬 Chat App
 - Real-time WebSocket messaging
+- Threaded replies (like Messenger)
 - Emoji picker with insert-at-cursor
 - Stylish glassmorphic + gradient UI
 - User avatars and sender IDs
