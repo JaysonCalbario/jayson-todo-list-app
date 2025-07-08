@@ -3,11 +3,8 @@
 import React from 'react';
 import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
-import { useChatSocket } from './useChatSocket';
-
-interface ChatProps {
-  onSwitchView?: () => void; 
-}
+import { useChatSocket } from '../hooks/useChatSocket';
+import { ChatProps } from '@/app/lib/types'; 
 
 const Chat = ({}: ChatProps) => {
   const { messages, clientId, setMessages } = useChatSocket();

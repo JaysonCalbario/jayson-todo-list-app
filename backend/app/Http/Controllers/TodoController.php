@@ -2,83 +2,56 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Todo;
-use Illuminate\Http\Request;
-use App\Events\TodoCreated;
-use App\Events\TodoUpdated;
-use App\Events\TodoDeleted;
+namespace App\Http\Controllers;
 
-use App\Events\TodoOrderUpdated;
+use App\Models\Todo;
+use App\Services\TodoService;
+use App\Http\Requests\Todo\StoreRequest;
+use App\Http\Requests\Todo\UpdateRequest;
+use App\Http\Requests\Todo\ReorderRequest;
+use Illuminate\Http\JsonResponse;
 
 class TodoController extends Controller
 {
-    public function index()
+    protected TodoService $service;
+
+    public function __construct(TodoService $service)
     {
-        return response()->json(Todo::orderBy('position')->get());
+        $this->service = $service;
     }
 
-    public function store(Request $request)
+    public function index(): JsonResponse
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-        ]);
+        return response()->json($this->service->getAllTodos());
+    }
 
-        $todo = Todo::create([
-            'title' => $request->title,
-            'completed' => false,
-        ]);
-
-        broadcast(new TodoCreated($todo))->toOthers();
-
+    public function store(StoreRequest $request): JsonResponse
+    {
+        $todo = $this->service->createTodo($request->validated());
         return response()->json($todo, 201);
     }
 
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
-        $todo = Todo::findOrFail($id);
+        $todo = $this->service->getTodoById($id);
         return response()->json($todo);
     }
 
-    public function update(Request $request, string $id)
+    public function update(UpdateRequest $request, string $id): JsonResponse
     {
-        $todo = Todo::findOrFail($id);
-
-        $request->validate([
-            'title' => 'string|max:255',
-            'completed' => 'boolean',
-        ]);
-
-        $todo->update($request->only(['title', 'completed']));
-
-        broadcast(new TodoUpdated($todo))->toOthers();
-
+        $todo = $this->service->updateTodo($id, $request->validated());
         return response()->json($todo);
     }
 
-    public function reorder(Request $request)
+    public function reorder(ReorderRequest $request): JsonResponse
     {
-        $ids = $request->input('ids');
-    
-        if (!is_array($ids)) {
-            return response()->json(['error' => 'Invalid format'], 400);
-        }
-    
-        foreach ($ids as $index => $id) {
-            Todo::where('id', $id)->update(['position' => $index]);
-        }
-    
-        broadcast(new \App\Events\TodoOrderUpdated($ids))->toOthers();
-    
+        $this->service->reorderTodos($request->validated()['ids']);
         return response()->json(['message' => 'Reordered successfully']);
     }
-    
-    public function destroy(string $id)
+
+    public function destroy(string $id): JsonResponse
     {
-        $todo = Todo::findOrFail($id);
-        $todo->delete();
-
-        broadcast(new TodoDeleted($todo->id))->toOthers();
-
+        $this->service->deleteTodo($id);
         return response()->json(['message' => 'Todo deleted']);
     }
 }

@@ -4,7 +4,10 @@ import { useState } from 'react';
 import './globals.css';
 import TodoList from '@/components/TodoList';
 import Chat from '@/components/Chat';
-import ToastProvider from '@/components/ToastProvider';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 export default function RootLayout() {
   const [view, setView] = useState<'chat' | 'todo'>('chat');
@@ -12,7 +15,7 @@ export default function RootLayout() {
   return (
     <html lang="en">
       <body className="bg-gray-50 text-gray-900 min-h-screen">
-        <ToastProvider>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
           <main className="flex flex-col items-center justify-center p-4 space-y-6">
             <div className="w-full max-w-4xl">
               {view === 'chat' ? (
@@ -70,7 +73,7 @@ export default function RootLayout() {
               )}
             </div>
           </main>
-        </ToastProvider>
+
       </body>
     </html>
   );
